@@ -12,6 +12,7 @@ import {
   Heading,
   extendTheme,
 } from '@chakra-ui/react';
+import { useQuery, useSubscription } from 'urql';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
 import { Logo } from './Logo';
 import { Counter } from './components/donation/Counter';
@@ -23,7 +24,37 @@ const theme = extendTheme({
   },
 });
 
+const TotalDonationsQuery = `
+  query Query {
+    totalDonations
+  }
+`;
+
+const TotalUpdatedQuery = `
+  subscription Subscription {
+    totalUpdated {
+      total
+    }
+  }
+`;
+
+function handleSubscription(previous: any, newTotal: any) {
+  return newTotal?.totalUpdated?.total;
+}
+
 export function App() {
+  const [res] = useSubscription(
+    { query: TotalUpdatedQuery },
+    handleSubscription,
+  );
+
+  const [{ data, fetching, error }] = useQuery({
+    query: TotalDonationsQuery,
+  });
+
+  if (fetching) return <p>Loading....</p>;
+  if (error) return <p>Something went wrong</p>;
+
   return (
     <ChakraProvider theme={theme}>
       <Box textAlign="center" fontSize="xl">
@@ -42,7 +73,7 @@ export function App() {
             </Text>
 
             <Heading as="h2" size="4xl">
-              <Counter from={0} to={2345243554} />
+              <Counter from={0} to={res.data || data.totalDonations} />
             </Heading>
           </VStack>
         </Grid>
