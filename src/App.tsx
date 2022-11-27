@@ -17,6 +17,7 @@ import { ColorModeSwitcher } from './ColorModeSwitcher';
 import { Logo } from './Logo';
 import { Counter } from './components/donation/Counter';
 import Leaderboard from './components/leaderboard/Leaderboard';
+import DonationWizard from './components/donation/DonationWizard';
 
 const theme = extendTheme({
   fonts: {
@@ -74,7 +75,7 @@ export function App() {
               <Counter from={0} to={res.data || data.totalDonations} />
             </Heading>
 
-            {/* Donation Wizard */}
+            <DonationWizard />
 
             <Leaderboard />
           </VStack>
