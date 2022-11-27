@@ -37,9 +37,9 @@ const CountSelection = ({ next, initialCount }: CountSelectionProps) => {
 
   const group = getRootProps;
 
-  function nextStep() {
+  const nextStep = () => {
     next({ count: pounds });
-  }
+  };
 
   return (
     <VStack spacing={4} align="stretch">
@@ -80,10 +80,10 @@ const CountSelection = ({ next, initialCount }: CountSelectionProps) => {
         colorScheme="orange"
         size="lg"
         borderRadius="full"
-        onClick={() => nextStep()}
+        onClick={nextStep}
         width="100%"
       >
-        Next1
+        Next
       </Button>
     </VStack>
   );
