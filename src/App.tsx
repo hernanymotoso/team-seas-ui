@@ -16,6 +16,7 @@ import { useQuery, useSubscription } from 'urql';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
 import { Logo } from './Logo';
 import { Counter } from './components/donation/Counter';
+import Leaderboard from './components/leaderboard/Leaderboard';
 
 const theme = extendTheme({
   fonts: {
@@ -62,19 +63,20 @@ export function App() {
           <ColorModeSwitcher justifySelf="flex-end" />
           <VStack spacing={8}>
             <Logo h="32" pointerEvents="none" />
-
             <Heading as="h1" size="xl">
               JOIN THE MOVEMENT!
             </Heading>
-
             <Text>
               The team is growing everyday and scoring wins for the planet.
               <br /> Remove trash with us and track our progress!
             </Text>
-
             <Heading as="h2" size="4xl">
               <Counter from={0} to={res.data || data.totalDonations} />
             </Heading>
+
+            {/* Donation Wizard */}
+
+            <Leaderboard />
           </VStack>
         </Grid>
       </Box>
