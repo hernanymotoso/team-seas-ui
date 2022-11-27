@@ -1,40 +1,75 @@
-import { Box, Heading, VStack } from '@chakra-ui/react';
-import React from 'react';
+import {
+  Box,
+  Heading,
+  Radio,
+  RadioGroup,
+  Stack,
+  VStack,
+} from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { useQuery } from 'urql';
+import { Donation } from '../../models/donation.domain';
 import LeaderboardItem from './LeaderboardItem';
 
+const DonationsQuery = `
+    query Query($orderBy: OrderByParams) {
+        donations(orderBy: $orderBy) {
+            count
+            id
+            displayName
+            createdAt
+            message
+            team
+        }
+    }
+`;
+
+type DonationsQueryDomain = {
+  donations: Donation[];
+};
+
 export default function Leaderboard() {
+  const [field, setOrderByField] = useState('createdAt');
+
+  const [{ data, fetching, error }] = useQuery<DonationsQueryDomain>({
+    query: DonationsQuery,
+    variables: {
+      orderBy: {
+        field,
+        direction: 'desc',
+      },
+    },
+  });
+
+  if (fetching) return <p>Loading....</p>;
+  if (error) return <p>Something went wrong</p>;
+
   return (
     <Box w="100%">
-      <Heading>LEADERBOARD</Heading>
+      <Heading as="h1" size="2xl">
+        LEADERBOARD
+      </Heading>
+
+      <RadioGroup
+        onChange={setOrderByField}
+        value={field}
+        mx="auto"
+        width="fit-content"
+      >
+        <Stack direction="row" p="5">
+          <Radio value="createdAt">Most Recent</Radio>
+
+          <Radio value="count">Most Pounds</Radio>
+        </Stack>
+      </RadioGroup>
 
       <VStack spacing={4}>
-        <LeaderboardItem
-          donation={{
-            displayName: 'Mr Best',
-            count: 1000,
-            createdAt: '2022-12-12T12:30:11',
-            team: 'Team 1',
-            message: 'Any message 1',
-          }}
-        />
-
-        <LeaderboardItem
-          donation={{
-            displayName: 'Mr Best',
-            count: 1000,
-            createdAt: '2022-12-12T12:30:11',
-            team: 'Team 2',
-            message: 'Any message 2',
-          }}
-        />
-
-        <LeaderboardItem
-          donation={{
-            displayName: 'Mr Best',
-            count: 1000,
-            createdAt: '2022-12-12T12:30:11',
-          }}
-        />
+        {data?.donations.map(donation => (
+          <LeaderboardItem
+            key={`leaderboard-item-${donation.id}`}
+            donation={donation}
+          />
+        ))}
       </VStack>
     </Box>
   );
