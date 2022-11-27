@@ -1,6 +1,5 @@
 ### team-sea-app
-#### basic project learn Nestjs, Prisma, GraphQL, React for a tutorial.
-
+#### basic project learn Nestjs, Prisma, GraphQL, Reac
 
 This project was bootstrapped with
 [Create React App](https://github.com/facebook/create-react-app).
