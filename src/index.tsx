@@ -1,6 +1,13 @@
 import { ColorModeScript } from '@chakra-ui/react';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
+import {
+  createClient,
+  Provider,
+  subscriptionExchange,
+  defaultExchanges,
+} from 'urql';
+import { createClient as createWSClient } from 'graphql-ws';
 import { App } from './App';
 import reportWebVitals from './reportWebVitals';
 import * as serviceWorker from './serviceWorker';
@@ -9,10 +16,31 @@ const container = document.getElementById('root');
 if (!container) throw new Error('Failed to find the root element');
 const root = ReactDOM.createRoot(container);
 
+const wsClient = createWSClient({
+  url: 'ws://localhost:3001/graphql',
+});
+
+const client = createClient({
+  url: 'http://localhost:3001/graphql',
+  exchanges: [
+    ...defaultExchanges,
+    subscriptionExchange({
+      forwardSubscription: operation => ({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        subscribe: (sink: any) => ({
+          unsubscribe: wsClient.subscribe(operation, sink),
+        }),
+      }),
+    }),
+  ],
+});
+
 root.render(
   <React.StrictMode>
     <ColorModeScript />
-    <App />
+    <Provider value={client}>
+      <App />
+    </Provider>
   </React.StrictMode>,
 );
 
