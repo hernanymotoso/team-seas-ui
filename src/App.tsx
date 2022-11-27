@@ -3,8 +3,7 @@ import {
   ChakraProvider,
   Box,
   Text,
-  Link,
-  VStack,
+ VStack,
   Code,
   Grid,
   theme,
@@ -22,15 +21,7 @@ export const App = () => (
           <Text>
             Edit <Code fontSize="xl">src/App.tsx</Code> and save to reload.
           </Text>
-          <Link
-            color="teal.500"
-            href="https://chakra-ui.com"
-            fontSize="2xl"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn Chakra
-          </Link>
+       
         </VStack>
       </Grid>
     </Box>
