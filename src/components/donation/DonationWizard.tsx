@@ -1,9 +1,18 @@
-import { Box, Button, VStack } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import { useMutation } from 'urql';
 import CountSelection from './CountSelection';
 import DonationDetails from './DonationDetails';
 
-// type Props = {};
+const CreateDonation = `
+    mutation Mutation($createDonationInput: CreateDonationInput!) {
+        createDonation(createDonationInput: $createDonationInput) {
+            count
+            createdAt
+            id
+        }
+    }
+`;
 
 export default function DonationWizard() {
   const [step, setStep] = useState(0);
@@ -11,15 +20,28 @@ export default function DonationWizard() {
     count: 20,
   });
 
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  const [donationResult, createDonation] = useMutation(CreateDonation);
+
   const next = (values: any = {}) => {
     const mergedDetails = { ...donationDetails, ...values };
 
-    setStep(step + 1);
-    setDonationDetails(mergedDetails);
+    if (step === pages.length - 1) {
+      submitDonation(mergedDetails);
+    } else {
+      setStep(step + 1);
+      setDonationDetails(mergedDetails);
+    }
   };
 
   const previous = () => {
     setStep(step - 1);
+  };
+
+  const submitDonation = async (values: any) => {
+    await createDonation({ createDonationInput: values });
+    setShowConfirmation(true);
   };
 
   const pages = [
@@ -28,8 +50,22 @@ export default function DonationWizard() {
   ];
 
   return (
-    <Box boxShadow="xl" p={8} bg="white" borderRadius="xl" minW="sm">
-      {pages[step]}
+    <Box
+      boxShadow="xl"
+      p={8}
+      bg="white"
+      borderRadius="xl"
+      minW="sm"
+      color="#464646"
+    >
+      {showConfirmation ? (
+        <div>
+          Thank you for your donation of $
+          {donationResult?.data.createDonation?.count}!!!
+        </div>
+      ) : (
+        pages[step]
+      )}
     </Box>
   );
 }
