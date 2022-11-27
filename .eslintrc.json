@@ -28,6 +28,7 @@
       "prettier"
     ],
     "rules": {
+      "consistent-return": "off",
       "react/function-component-definition": [
         "error",
         {
