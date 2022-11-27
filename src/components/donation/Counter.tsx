@@ -1,4 +1,4 @@
-import { animate, DragControls } from 'framer-motion';
+import { animate } from 'framer-motion';
 import React, { useEffect, useRef } from 'react';
 
 interface CounterProps {
