@@ -1,15 +1,7 @@
 import { Avatar, Badge, Box, Flex, Text } from '@chakra-ui/react';
 import React from 'react';
+import { Donation } from '../../models/donation.domain';
 import formatDate from '../../utils/formatDate';
-
-type Donation = {
-  id?: number;
-  count: number;
-  displayName: string;
-  message?: string;
-  team?: string;
-  createdAt: string;
-};
 
 type LeaderboardItemProps = {
   donation: Donation;
