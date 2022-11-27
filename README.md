@@ -1,5 +1,5 @@
 ### TeamSeas-app
-#### Basic project learn Nestjs, Prisma, GraphQL, React
+#### Basic project to learn Nestjs, Prisma, GraphQL, React
 
 This project was bootstrapped with
 [Create React App](https://github.com/facebook/create-react-app).
