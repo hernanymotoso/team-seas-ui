@@ -1,4 +1,3 @@
-import { ColorModeScript } from '@chakra-ui/react';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import {
@@ -37,7 +36,6 @@ const client = createClient({
 
 root.render(
   <React.StrictMode>
-    <ColorModeScript />
     <Provider value={client}>
       <App />
     </Provider>
